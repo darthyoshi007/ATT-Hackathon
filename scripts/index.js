@@ -21,8 +21,6 @@ var alchemy_language = watson.alchemy_language({
   api_key: '9908391a4c1a215d4439bed414a8597a867632da'
 });
 
-//var curDir = fs.readdirSync()
-
 watcher.on('all', (event, path) => {
   console.log("Event: " + event + " | Path: " + path);
   var arr = path.split('.');
