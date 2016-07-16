@@ -8,7 +8,6 @@ module.exports = function()
 {
   this.w_text = function(pathString, docConvert, callback) {
     var content;
-    console.log('hey bish');
     // fs.readFile(pathString, 'utf8', function read(err, data){
     //   if (err) {
     //     throw err;

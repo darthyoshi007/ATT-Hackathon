@@ -2,9 +2,9 @@
   "name": "organizez",
   "version": "0.0.1",
   "description": "Organizes your files without a hitch.",
-  "main": "index.js",
+  "main": "./scripts/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron ./scripts/main.js"
   },
   "repository": {
     "type": "git",
@@ -20,9 +20,20 @@
   },
   "homepage": "https://github.com/darthyoshi007/ATT-Hackathon#readme",
   "dependencies": {
+    "angular": "^1.5.7",
+    "angularfire": "^2.0.1",
+    "bootstrap": "^4.0.0-alpha.2",
     "chokidar": "^1.6.0",
     "firebase": "^3.2.0",
+    "font-awesome": "^4.6.3",
+    "forever": "^0.15.2",
+    "jquery": "^3.1.0",
+    "jquery.2": "^1.0.0",
     "mv": "^2.1.1",
+    "node-notifier": "^4.6.0",
     "watson-developer-cloud": "^1.12.2"
+  },
+  "devDependencies": {
+    "electron-prebuilt": "^1.2.7"
   }
 }
