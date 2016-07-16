@@ -71,6 +71,10 @@ watcher.on('all', (event, pathToFile) => {
         w_text(pathToFile.toString(), true, moveFile);
         break;
 
+      case "txt":
+        w_text(pathToFile.toString(), false, moveFile);
+        break;
+
       //if a file is audio, send to Music folder
       case "wav":
       case "mp3":
@@ -98,7 +102,7 @@ watcher.on('all', (event, pathToFile) => {
       //if a file that I have no specified, send to watson text but parse using native node fs.readfile
       default:
         // if (debug){
-        //   w_text(pathToFile, false, printJson);
+          // w_text(pathToFile, false, printJson);
         // }
         break;
     }
@@ -120,6 +124,7 @@ firebase.initializeApp({
 var db = firebase.database();
 var moveRef = db.ref("moveActions");
 var commandsRef = db.ref("commands");
+commandsRef.remove();
 
 commandsRef.on("child_added", function(snapshot){
   if (snapshot.val()){
@@ -162,7 +167,15 @@ var moveFile = function(result, pathToFile, image){
     }
     else{
         fileType = "Documents";
-        mostRelevantResult = result.concepts[0].text;
+        if (result.entities && result.entities.length > 0){
+          console.log(result);
+          mostRelevantResult = result.entities[0].text;
+          // console.log(mostRelevantResult);
+        } else if (result.concepts && result.concepts.length > 0){
+            mostRelevantResult = result.concepts[0].text;
+        } else {
+          mostRelevantResult = "";
+        }
     }
   }
   mv(pathToFile, '/Users/' + userName + '/OrganizEZ/' + fileType + '/' + mostRelevantResult + '/' + fileName[fileName.length - 1], {mkdirp: true}, function(err) {
@@ -173,7 +186,7 @@ var moveFile = function(result, pathToFile, image){
     } else {
       moveRef.push({
         from : pathToFile,
-        to : '/Users/' + userName + '/OrganizEZ/' + mostRelevantResult + '/' + fileName[fileName.length - 1],
+        to : '/Users/' + userName + '/OrganizEZ/' + fileType + '/' + mostRelevantResult + '/' + fileName[fileName.length - 1],
         image : image,
         date : Date.now(),
         fileName : fileName[fileName.length - 1]
@@ -182,11 +195,11 @@ var moveFile = function(result, pathToFile, image){
     //creates a notification which can be clicked to lead to the moved file
     notifier.notify({
       'title': "OrganizEZ",
-      'message': 'Moved ' + fileName[fileName.length - 1] + ' to /Users/' + userName + '/OrganizEZ/' + mostRelevantResult + '/',
+      'message': 'Moved ' + fileName[fileName.length - 1] + ' to /Users/' + userName + '/OrganizEZ/' + fileType + '/' + mostRelevantResult + '/',
       'wait': true
     });
     notifier.on('click', function (notifierObject, options) {
-      var cmd = ('start /Users/' + userName + '/OrganizEZ/' + mostRelevantResult + '/').replace(/\//g, "\\");
+      var cmd = ('start /Users/' + userName + '/OrganizEZ/' + fileType + '/' + mostRelevantResult + '/').replace(/\//g, "\\");
       exec(cmd, function(error, stdout, stderr) {
         if (error){
           console.log(error);

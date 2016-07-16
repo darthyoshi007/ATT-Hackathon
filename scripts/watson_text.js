@@ -72,11 +72,12 @@ module.exports = function()
 
     function sendToWatson(){
       alchemy_language.combined(content, function (err, response) {
-        if (err)
+        if (err){
           console.log('error: ', err);
-        else
-          //console.log(JSON.stringify(response, null, 2));
+        } else{
           callback(response, pathString, false);
+          console.log(response);
+        }
       });
       //content = JSON.stringify(response, null, 2);
     }
