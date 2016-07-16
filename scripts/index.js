@@ -6,7 +6,7 @@ var chokidar = require('chokidar');
 var mv = require('mv');
 
 //if true, the program will print logs based on JSON received from watson API
-var debug = true;
+var debug = false;
 
 ///////// Watson Handling ///////////
 require('./watson_image.js')();
@@ -21,69 +21,76 @@ var watcher = chokidar.watch('/Users/' + userName + '/Downloads', {
 });
 
 //connects to watson's alchemy API
-var alchemy_language = watson.alchemy_language({
-  api_key: '9908391a4c1a215d4439bed414a8597a867632da'
-});
-classify('foo', printJson)
-console.log('Waiting for callback..')
 //called upon any 'add' event -- any file moved to or downloaded to the Downloads folder
-/*watcher.on('all', (event, pathToFile) => {
+watcher.on('all', (event, pathToFile) => {
+  if (event == "add"){
+    if (debug){
+      console.log("Event: " + event + " | Path: " + pathToFile.toString()); //logs the different events and files for debugging purposes
+    }
 
-  if (debug){
-    console.log("Event: " + event + " | Path: " + pathToFile.toString()); //logs the different events and files for debugging purposes
+    //self-explanatory -- finds extension of file from path
+    var type = path.extname(pathToFile.toString()).substring(1);
+
+    //switches based on the extension
+    switch(type){
+
+      //if an image file, send to watson image API
+      case "jpeg":
+      case "gif":
+      case "jpg":
+      case "png":
+        w_image(pathToFile.toString(), moveFile);
+        break;
+
+      //if a file that can be parsed by watson document convertor, send to watson text with parameter of true
+      case "html":
+      case "doc":
+      case "docx":
+      case "pdf":
+        w_text(pathToFile.toString(), true, moveFile);
+        break;
+
+      //if a file that I have no specified, send to watson text but parse using native node fs.readfile
+      default:
+        // if (debug){
+        //   w_text(pathToFile, false, printJson);
+        // }
+        break;
+    }
   }
-
-  //self-explanatory -- finds extension of file from path
-  var type = path.extname(pathToFile.toString()).substring(1);
-
-  //switches based on the extension
-  switch(type){
-
-    //if an image file, send to watson image API
-    case "jpeg":
-    case "gif":
-    case "jpg":
-    case "png":
-      //w_image(pathToFile.toString(), moveFile);
-
-      break;
-
-    //if a file that can be parsed by watson document convertor, send to watson text with parameter of true
-    case "html":
-    case "doc":
-    case "docx":
-    case "pdf":
-      if (debug){
-        //watsonText(pathToFile.toString(), true, moveFile);
-      }
-      break;
-
-    //if a file that I have no specified, send to watson text but parse using native node fs.readfile
-    default:
-      // if (debug){
-      //   w_text(pathToFile, false, printJson);
-      // }
-      break;
-  }
-
 });
 
-*/
+
 //prints out the json to debug
 var printJson = function(result){
   console.log(result);
 }
+classify('foo',printJson)
 
-var moveFile = function(result){
+
+
+
+var moveFile = function(result, pathToFile, image){
   if (debug){
     printJson(result);
   }
-}
 
-// TODO implement moving the files
-// console.log(path + " is a pdf. Moving to Documents Folder");
-// var movePath = path.split('\\');
-// mv(path, '/Users/' + userName + '/OrganizEZ/' + movePath[movePath.length - 1], {mkdirp: true}, function(err) {
-//   if (err)
-//   console.log(err);
-// });
+  //gets the fileName
+  var fileName = pathToFile.toString().split('\\');
+
+  //moves the file to the appropriate folder
+  var mostRelevantResult = "";
+  if (image){
+    mostRelevantResult = result.imageKeywords[0].text;
+  } else {
+    mostRelevantResult = result.concepts[0].text;
+  }
+
+  mv(pathToFile, '/Users/' + userName + '/OrganizEZ/' + mostRelevantResult + '/' + fileName[fileName.length - 1], {mkdirp: true}, function(err) {
+    if (debug){
+      if (err){
+        console.log(err);
+      }
+    }
+  });
+}

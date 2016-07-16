@@ -2,13 +2,13 @@ var watson = require('watson-developer-cloud');
 
 var alchemy_vision = watson.alchemy_vision
 ({
-  api_key: 'cf61b89ce3e0a56602f9e89d64a72b11dff56fb5'
+  api_key: '9908391a4c1a215d4439bed414a8597a867632da'
 });
 
 var visual_recognition = watson.visual_recognition
 ({
   url: 'https://gateway-a.watsonplatform.net/visual-recognition/api',
-  api_key: '',
+  api_key: 'cf61b89ce3e0a56602f9e89d64a72b11dff56fb5',
   version: 'v3',
   version_date: '2016-05-19'
 });
@@ -31,8 +31,8 @@ module.exports = function()
       if (err)
         result = err;
       else
-        result = JSON.stringify(keywords, null, 2);
-      callback(result);
+        result = keywords;
+      callback(result, path, true);
     });
   }
 
@@ -58,7 +58,7 @@ module.exports = function()
     else
       result = JSON.stringify(res, null, 2);
 
-    callback(result);
+    callback(result, path, true);
     });
   }
 }
