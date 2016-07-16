@@ -70,6 +70,26 @@ watcher.on('all', (event, pathToFile) => {
         w_text(pathToFile.toString(), true, moveFile);
         break;
 
+      //if a file is audio, send to Music folder
+      case "wav":
+      case "mp3":
+      case "m4a":
+      case "wma":
+      case "ogg":
+        moveFile("Music", pathToFile.toString(), false); //move to OrganizEZ/Music
+        break;
+
+      //if a file is video
+      case "mp4":
+      case "avi":
+      case "mov":
+      case "avchd":
+      case "flv":
+      case "wmv":
+      case "mpeg":
+        moveFile("Video", pathToFile.toString(), false); //move to OrganizEZ/Videos
+        break;
+
       //if a file that I have no specified, send to watson text but parse using native node fs.readfile
       default:
         // if (debug){
@@ -83,7 +103,7 @@ watcher.on('all', (event, pathToFile) => {
 
 //prints out the json to debug
 var printJson = function(result){
-  console.log(result);
+    console.log(result);
 }
 // classify('foo',printJson);
 
@@ -108,7 +128,15 @@ var moveFile = function(result, pathToFile, image){
   if (image){
     mostRelevantResult = result.imageKeywords[0].text;
   } else {
-    mostRelevantResult = result.concepts[0].text;
+    if(result == "Music"){
+      mostRelevantResult = "Music";
+    }
+    else if(result == "Video"){
+      mostRelevantResult = "Videos";
+    }
+    else{
+        mostRelevantResult = result.concepts[0].text;
+    }
   }
   mv(pathToFile, '/Users/' + userName + '/OrganizEZ/' + mostRelevantResult + '/' + fileName[fileName.length - 1], {mkdirp: true}, function(err) {
     if (err){
