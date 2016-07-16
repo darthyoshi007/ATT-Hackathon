@@ -1,23 +1,24 @@
+
 var path = require('path');
 var userName = process.env['USERPROFILE'].split(path.sep)[2];
 var watson = require('watson-developer-cloud');
 var mv = require('mv');
+
+///////// Watson Handling ///////////
 require('./watson_image.js')();
-<<<<<<< HEAD
 require('./watson_text.js')();
+/////////////////////////////////////
+
 var watcher = chokidar.watch('/Users/' + userName + '/Downloads', {
   ignored: /[\/\\]\./,
   persistent: true,
   depth: 0
 });
 
-=======
->>>>>>> origin/master
 var alchemy_language = watson.alchemy_language({
   api_key: '9908391a4c1a215d4439bed414a8597a867632da'
 });
 
-<<<<<<< HEAD
 watcher.on('all', (event, path) => {
   console.log("Event: " + event + " | Path: " + path);
   var arr = path.split('.');
@@ -30,7 +31,6 @@ watcher.on('all', (event, path) => {
       }
     });
   }
-=======
 
 
 var json = function(result){
@@ -39,5 +39,4 @@ var json = function(result){
 
 image = w_image('./test.jpg',json)
 
->>>>>>> origin/master
 
