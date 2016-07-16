@@ -9,7 +9,7 @@ module.exports = function()
   this.watsonText = this.w_text;
 }
 
-this.w_text = function(pathString) {
+this.w_text = function(pathString, docConvert, callback) {
   var content;
   console.log('hey bish');
   // fs.readFile(pathString, 'utf8', function read(err, data){
@@ -19,7 +19,20 @@ this.w_text = function(pathString) {
   //   content = data
   //   giveMeTheMoney();
   // });
-giveMeTheMoney();
+  if(!docConvert){
+    fs.readFile(pathString, 'utf8', function read(err, data){
+      if (err) {
+        console.log("error: not supported file");
+      }
+      content = {
+        text: data
+      }
+      sendToWatson();
+    });
+  }
+  else{
+    giveMeTheMoney();
+  }
 
 function giveMeTheMoney(){
 
@@ -66,7 +79,8 @@ function sendToWatson(){
     if (err)
       console.log('error: ', err);
     else
-      console.log(JSON.stringify(response, null, 2));
+      //console.log(JSON.stringify(response, null, 2));
+      callback(response);
   });
   //content = JSON.stringify(response, null, 2);
 }
@@ -82,4 +96,5 @@ function sendToWatson(){
   //   return content;
   // }
 
-this.w_text("./lionTest.docx");
+this.w_text("./wordTest.docx", true);
+this.w_text("./test.txt", false);
