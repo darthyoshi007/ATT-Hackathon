@@ -95,6 +95,3 @@ function sendToWatson(){
   //   console.log(content);
   //   return content;
   // }
-
-this.w_text("./wordTest.docx", true);
-this.w_text("./test.txt", false);

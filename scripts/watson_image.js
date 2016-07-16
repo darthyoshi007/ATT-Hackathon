@@ -9,21 +9,21 @@ var alchemy_vision = watson.alchemy_vision
 
 module.exports = function()
 {
-  this.w_image = function(path, callback) 
+  this.w_image = function(path, callback)
   {
     var fs = require('fs');
 
-    var params = 
+    var params =
     {
       image: fs.createReadStream(path)
     }
 
     var result;
 
-    alchemy_vision.getImageKeywords(params, function (err, keywords) 
+    alchemy_vision.getImageKeywords(params, function (err, keywords)
     {
       if (err)
-        result = 'error'; 
+        result = err;
       else
         result = JSON.stringify(keywords, null, 2);
       callback(result);
