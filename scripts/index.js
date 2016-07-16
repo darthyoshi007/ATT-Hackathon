@@ -52,7 +52,7 @@ watcher.on('all', (event, pathToFile) => {
     case "docx":
     case "pdf":
       if (debug){
-        watsonText(pathToFile.toString(), true, moveFile);
+        w_text(pathToFile.toString(), true, moveFile);
       }
       break;
 
@@ -72,16 +72,27 @@ var printJson = function(result){
   console.log(result);
 }
 
-var moveFile = function(result){
+var moveFile = function(result, pathToFile, image){
   if (debug){
     printJson(result);
   }
-}
 
-// TODO implement moving the files
-// console.log(path + " is a pdf. Moving to Documents Folder");
-// var movePath = path.split('\\');
-// mv(path, '/Users/' + userName + '/OrganizEZ/' + movePath[movePath.length - 1], {mkdirp: true}, function(err) {
-//   if (err)
-//   console.log(err);
-// });
+  //gets the fileName
+  var fileName = pathToFile.toString().split('\\');
+
+  //moves the file to the appropriate folder
+  var mostRelevantResult = "";
+  if (image){
+    console.log(result[5]);
+    // mostRelevantResult = result.imageKeywords[0].text;
+  } else {
+    // mostRelevantResult = result.
+  }
+  // mv(path, '/Users/' + userName + '/OrganizEZ/' + fileName[fileName.length - 1], {mkdirp: true}, function(err) {
+  //   if (debug){
+  //     if (err){
+  //       console.log(err);
+  //     }
+  //   }
+  // });
+}

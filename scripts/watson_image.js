@@ -26,7 +26,7 @@ module.exports = function()
         result = err;
       else
         result = JSON.stringify(keywords, null, 2);
-      callback(result);
+      callback(result, path, true);
     });
 
   }
