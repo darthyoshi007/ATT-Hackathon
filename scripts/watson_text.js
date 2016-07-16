@@ -52,9 +52,9 @@ module.exports = function()
           }
         }
       }, function (err, response) {
-        console.log("----------\n");
-        console.log("convert a single document\n");
-        console.log("----------\n");
+        // console.log("----------\n");
+        // console.log("convert a single document\n");
+        // console.log("----------\n");
         if (err) {
           console.error(err);
         } else {

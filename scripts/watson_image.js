@@ -25,7 +25,7 @@ module.exports = function()
       if (err)
         result = err;
       else
-        result = JSON.stringify(keywords, null, 2);
+        result = keywords;
       callback(result, path, true);
     });
 

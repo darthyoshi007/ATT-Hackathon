@@ -6,7 +6,7 @@ var chokidar = require('chokidar');
 var mv = require('mv');
 
 //if true, the program will print logs based on JSON received from watson API
-var debug = true;
+var debug = false;
 
 ///////// Watson Handling ///////////
 require('./watson_image.js')();
@@ -27,43 +27,41 @@ var alchemy_language = watson.alchemy_language({
 
 //called upon any 'add' event -- any file moved to or downloaded to the Downloads folder
 watcher.on('all', (event, pathToFile) => {
+  if (event == "add"){
+    if (debug){
+      console.log("Event: " + event + " | Path: " + pathToFile.toString()); //logs the different events and files for debugging purposes
+    }
 
-  if (debug){
-    console.log("Event: " + event + " | Path: " + pathToFile.toString()); //logs the different events and files for debugging purposes
-  }
+    //self-explanatory -- finds extension of file from path
+    var type = path.extname(pathToFile.toString()).substring(1);
 
-  //self-explanatory -- finds extension of file from path
-  var type = path.extname(pathToFile.toString()).substring(1);
+    //switches based on the extension
+    switch(type){
 
-  //switches based on the extension
-  switch(type){
+      //if an image file, send to watson image API
+      case "jpeg":
+      case "gif":
+      case "jpg":
+      case "png":
+        w_image(pathToFile.toString(), moveFile);
+        break;
 
-    //if an image file, send to watson image API
-    case "jpeg":
-    case "gif":
-    case "jpg":
-    case "png":
-      w_image(pathToFile.toString(), moveFile);
-      break;
-
-    //if a file that can be parsed by watson document convertor, send to watson text with parameter of true
-    case "html":
-    case "doc":
-    case "docx":
-    case "pdf":
-      if (debug){
+      //if a file that can be parsed by watson document convertor, send to watson text with parameter of true
+      case "html":
+      case "doc":
+      case "docx":
+      case "pdf":
         w_text(pathToFile.toString(), true, moveFile);
-      }
-      break;
+        break;
 
-    //if a file that I have no specified, send to watson text but parse using native node fs.readfile
-    default:
-      // if (debug){
-      //   w_text(pathToFile, false, printJson);
-      // }
-      break;
+      //if a file that I have no specified, send to watson text but parse using native node fs.readfile
+      default:
+        // if (debug){
+        //   w_text(pathToFile, false, printJson);
+        // }
+        break;
+    }
   }
-
 });
 
 
@@ -83,16 +81,15 @@ var moveFile = function(result, pathToFile, image){
   //moves the file to the appropriate folder
   var mostRelevantResult = "";
   if (image){
-    console.log(result[5]);
-    // mostRelevantResult = result.imageKeywords[0].text;
+    mostRelevantResult = result.imageKeywords[0].text;
   } else {
-    // mostRelevantResult = result.
+    mostRelevantResult = result.concepts[0].text;
   }
-  // mv(path, '/Users/' + userName + '/OrganizEZ/' + fileName[fileName.length - 1], {mkdirp: true}, function(err) {
-  //   if (debug){
-  //     if (err){
-  //       console.log(err);
-  //     }
-  //   }
-  // });
+  mv(pathToFile, '/Users/' + userName + '/OrganizEZ/' + mostRelevantResult + '/' + fileName[fileName.length - 1], {mkdirp: true}, function(err) {
+    if (debug){
+      if (err){
+        console.log(err);
+      }
+    }
+  });
 }
