@@ -25,17 +25,11 @@ var alchemy_language = watson.alchemy_language({
   api_key: '9908391a4c1a215d4439bed414a8597a867632da'
 });
 
-
-//prints out the json to debug
-var printJson = function(result){
-  console.log(result);
-}
-
 //called upon any 'add' event -- any file moved to or downloaded to the Downloads folder
 watcher.on('all', (event, pathToFile) => {
 
   if (debug){
-    console.log("Event: " + event + " | Path: " + pathToFile); //logs the different events and files for debugging purposes
+    console.log("Event: " + event + " | Path: " + pathToFile.toString()); //logs the different events and files for debugging purposes
   }
 
   //self-explanatory -- finds extension of file from path
@@ -49,9 +43,7 @@ watcher.on('all', (event, pathToFile) => {
     case "gif":
     case "jpg":
     case "png":
-      if (debug){
-        w_image(pathToFile.toString(), printJson);
-      }
+      w_image(pathToFile.toString(), moveFile);
       break;
 
     //if a file that can be parsed by watson document convertor, send to watson text with parameter of true
@@ -60,7 +52,7 @@ watcher.on('all', (event, pathToFile) => {
     case "docx":
     case "pdf":
       if (debug){
-        w_text(pathToFile.toString(), true, printJson);
+        watsonText(pathToFile.toString(), true, moveFile);
       }
       break;
 
@@ -73,6 +65,18 @@ watcher.on('all', (event, pathToFile) => {
   }
 
 });
+
+
+//prints out the json to debug
+var printJson = function(result){
+  console.log(result);
+}
+
+var moveFile = function(result){
+  if (debug){
+    printJson(result);
+  }
+}
 
 // TODO implement moving the files
 // console.log(path + " is a pdf. Moving to Documents Folder");
