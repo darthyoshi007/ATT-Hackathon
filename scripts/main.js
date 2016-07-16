@@ -125,7 +125,9 @@ var moveFile = function(result, pathToFile, image){
 
   //moves the file to the appropriate folder
   var mostRelevantResult = "";
+  var fileType = "";
   if (image){
+    fileType = "Pictures";
     mostRelevantResult = result.imageKeywords[0].text;
   } else {
     if(result == "Music"){
@@ -135,10 +137,11 @@ var moveFile = function(result, pathToFile, image){
       mostRelevantResult = "Videos";
     }
     else{
+        fileType = "Documents";
         mostRelevantResult = result.concepts[0].text;
     }
   }
-  mv(pathToFile, '/Users/' + userName + '/OrganizEZ/' + mostRelevantResult + '/' + fileName[fileName.length - 1], {mkdirp: true}, function(err) {
+  mv(pathToFile, '/Users/' + userName + '/OrganizEZ/' + fileType + '/' + mostRelevantResult + '/' + fileName[fileName.length - 1], {mkdirp: true}, function(err) {
     if (err){
       if (debug){
         console.log(err);
