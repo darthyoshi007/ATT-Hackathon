@@ -24,9 +24,10 @@ var watcher = chokidar.watch('/Users/' + userName + '/Downloads', {
 var alchemy_language = watson.alchemy_language({
   api_key: '9908391a4c1a215d4439bed414a8597a867632da'
 });
-
+classify('foo', printJson)
+console.log('Waiting for callback..')
 //called upon any 'add' event -- any file moved to or downloaded to the Downloads folder
-watcher.on('all', (event, pathToFile) => {
+/*watcher.on('all', (event, pathToFile) => {
 
   if (debug){
     console.log("Event: " + event + " | Path: " + pathToFile.toString()); //logs the different events and files for debugging purposes
@@ -43,7 +44,8 @@ watcher.on('all', (event, pathToFile) => {
     case "gif":
     case "jpg":
     case "png":
-      w_image(pathToFile.toString(), moveFile);
+      //w_image(pathToFile.toString(), moveFile);
+
       break;
 
     //if a file that can be parsed by watson document convertor, send to watson text with parameter of true
@@ -52,7 +54,7 @@ watcher.on('all', (event, pathToFile) => {
     case "docx":
     case "pdf":
       if (debug){
-        watsonText(pathToFile.toString(), true, moveFile);
+        //watsonText(pathToFile.toString(), true, moveFile);
       }
       break;
 
@@ -66,7 +68,7 @@ watcher.on('all', (event, pathToFile) => {
 
 });
 
-
+*/
 //prints out the json to debug
 var printJson = function(result){
   console.log(result);
