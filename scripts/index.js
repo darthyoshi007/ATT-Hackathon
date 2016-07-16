@@ -8,7 +8,7 @@ var params = {
   text: 'The quick brown fox jumped over the lazy panda.'
 };
 
-alchemy_language.extract(params, function (err, response) {
+alchemy_language.sentiment(params, function (err, response) {
   if (err)
     console.log('error:', err);
   else
