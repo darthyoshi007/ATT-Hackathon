@@ -90,6 +90,10 @@ watcher.on('all', (event, pathToFile) => {
         moveFile("Video", pathToFile.toString(), false); //move to OrganizEZ/Videos
         break;
 
+      //if a file is an installer
+      case "exe":
+      case "msi":
+        moveFile("Installer", pathToFile.toString(), false);
       //if a file that I have no specified, send to watson text but parse using native node fs.readfile
       default:
         // if (debug){
@@ -135,6 +139,9 @@ var moveFile = function(result, pathToFile, image){
     }
     else if(result == "Video"){
       mostRelevantResult = "Videos";
+    }
+    else if(result == "Installer"){
+      mostRelevantResult = "Installers";
     }
     else{
         fileType = "Documents";
