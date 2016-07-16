@@ -31,6 +31,7 @@
     "jquery.2": "^1.0.0",
     "mv": "^2.1.1",
     "node-notifier": "^4.6.0",
+    "open": "0.0.5",
     "watson-developer-cloud": "^1.12.2"
   },
   "devDependencies": {

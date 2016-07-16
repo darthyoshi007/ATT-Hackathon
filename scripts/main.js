@@ -15,6 +15,7 @@ app.on('ready', function() {
     win.loadURL(`file://${__dirname}/../html/index.html`);
 });
 
+var open = require("open");
 var path = require('path');
 var fs = require('fs');
 var userName = process.env['USERPROFILE'].split(path.sep)[2];
@@ -118,6 +119,22 @@ firebase.initializeApp({
 });
 var db = firebase.database();
 var moveRef = db.ref("moveActions");
+var commandsRef = db.ref("commands");
+
+commandsRef.on("child_added", function(snapshot){
+  if (snapshot.val()){
+    console.log(snapshot.val());
+    var cmd = snapshot.val().filePath;
+    open(cmd);
+  }
+  // exec(cmd, function(error, stdout, stderr) {
+  //   if (error){
+  //     console.log(error);
+  //   }
+  //   console.log(stdout);
+  //   console.log(stderr);
+  // });
+});
 
 var moveFile = function(result, pathToFile, image){
   if (debug){

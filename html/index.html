@@ -9,29 +9,35 @@
   </head>
   <body ng-controller="MoveController">
     <nav class="navbar navbar-full navbar-dark bg-primary">
-      <a class="navbar-brand" href="#">OranizEZ</a>
+      <a class="navbar-brand" href="#">OrganizEZ</a>
+      <!-- <p> The smartest way to sort your files </p> -->
+      <!-- <label> Search: <input ng-model="searchText"
+        style = "color: #000000"></label> -->
+      <ul class="nav navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link">The smartest way to sort your files! <span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+      <form class="form-inline pull-xs-right">
+        <input ng-model="searchText" class="form-control" type="text" placeholder="Search">
+      </form>
     </nav>
-    <div class="list-group">
-      <a href="#" class="list-group-item" ng-repeat="moveAction in moveActions">
-        <h4 class="list-group-item-heading">{{moveAction.fileName}}</h4>
-        <row>
-          <!-- <div class="col-md-4">
-            <div>
-              <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-            </div>
-            <div>
-              <i class="fa fa-thumbs-down" aria-hidden="true"></i>
-            </div>
-          </div> -->
-          <!-- <div class="col-md-8"> -->
-            <div>
-              <img class="center-block" ng-src="{{moveAction.to}}" alt="some_text" style="width: 100px; height: 100px;" ng-show="moveAction.image == true"></img>
-            </div>
-            <p class="list-group-item-text">Moved from {{moveAction.from}} to {{moveAction.to}}</p>
-          <!-- </div> -->
-        </row>
-      </a>
+    <div id="searchTextResults" class="list-group">
+      <!-- <a ng-repeat="moveAction in moveActions | filter:searchText"> -->
+        <a ng-click="openFile(moveAction.to)" href="#" class="list-group-item" style="text-color: black;" ng-repeat="moveAction in moveActions | filter:searchText" ng-style="{'background-image':'url(' + moveAction.to + ')'}">
+          <!-- <img src=moveAction.to>No Image</img> -->
+          <h4 class="list-group-item-heading">{{moveAction.fileName}}</h4>
+          <p class="list-group-item-text">Moved {{moveAction.fileName}} to {{moveAction.to}}</p>
+          <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+          <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+        </a>
     </div>
+    <!-- <div class="list-group">
+      <a ng-click="openFile(moveAction.to)" href="#" class="list-group-item" ng-repeat="moveAction in moveActions" ng-style="{'background-image':'url(' + moveAction.to + ')'}">
+        <h4 class="list-group-item-heading">{{moveAction.fileName}}</h4>
+        <p class="list-group-item-text">Moved {{moveAction.fileName}} to {{moveAction.to}}</p>
+      </a>
+    </div> -->
 
     <script>window.$ = window.jQuery = require('../node_modules/jquery.2/node_modules/jquery/dist/jquery.min.js');</script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.3/js/tether.min.js"></script>

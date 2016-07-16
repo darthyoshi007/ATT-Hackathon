@@ -15,6 +15,14 @@
     $scope.ref = firebase.database().ref();
     $scope.moveRef = $scope.ref.child("moveActions");
     $scope.moveActions = $firebaseArray($scope.moveRef);
+    $scope.commandsRef = $scope.ref.child("commands");
+    $scope.openFile = function(filePath){
+      $scope.commandsRef.push({
+        command : ('start ' + filePath).replace(/\//g, "\\"),
+        filePath : filePath.replace(/\//g, "\\"),
+        rawFilePath : filePath
+      });
+    }
   }]);
 
 })();
